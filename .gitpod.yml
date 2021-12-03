@@ -1,4 +1,2 @@
-image: gitpod/workspace-mongodb
-
 tasks:
   - command: mkdir -p /workspace/data && mongod --dbpath /workspace/data
