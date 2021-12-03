@@ -1,5 +1,4 @@
-image:
-  file: .gitpod.dockerfile
+image: oviregie/gitpod-workspace-mongodb
 
 # tasks:
   # - command: mkdir -p /workspace/data && mongod --dbpath /workspace/data
