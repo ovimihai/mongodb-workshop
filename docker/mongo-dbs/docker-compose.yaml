@@ -1,0 +1,31 @@
+services:
+  mongo-container:
+    image: workshop-mongo-examples
+    environment:
+        # provide your credentials here
+        - MONGO_INITDB_ROOT_USERNAME=admin
+        - MONGO_INITDB_ROOT_PASSWORD=adminabcd
+        - EXAMPLE_DBS_COUNT=10
+    ports:
+      - "27100:27017"
+    volumes:
+        # if you wish to setup additional user accounts specific per DB or with different roles you can use following entry point
+      - "$PWD/mongo-entrypoint/:/docker-entrypoint-initdb.d/"
+    # no --auth is needed here as presence of username and password add this option automatically
+    command: mongod --auth --nojournal --oplogSize 16
+
+  # https://www.npmjs.com/package/mongo-gui
+  mongo-gui:
+    container_name: "mongo-gui"
+    image: ugleiton/mongo-gui
+    restart: always
+    ports:
+      - "4321:4321"
+    environment:
+#      - MONGO_URL=mongodb://admin:adminabcd@mongo-container:27017
+      - MONGO_URL=mongodb://user1:pass1@mongo-container:27017/db1
+
+networks:
+  default:
+    driver_opts:
+      com.docker.network.driver.mtu: 1450
