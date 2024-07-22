@@ -1,0 +1,8 @@
+services:
+  ws-progress:
+    build:
+      context: ./
+    ports:
+      - 8081:80
+    volumes:
+      - ${CURRENT_DIR}/app:/app

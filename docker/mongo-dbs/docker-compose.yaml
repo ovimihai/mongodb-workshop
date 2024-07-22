@@ -1,6 +1,6 @@
 services:
   mongo-container:
-    image: workshop-mongo-examples
+    image: workshop-mongo-dbs
     environment:
         # provide your credentials here
         - MONGO_INITDB_ROOT_USERNAME=admin
