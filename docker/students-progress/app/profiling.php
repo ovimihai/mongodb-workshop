@@ -20,7 +20,7 @@ if (isset($_GET['profiling'])) {
                 }
 
                 $client->$dbName->command(['profile' => $profiling,
-                    "slowms"=> 1,
+                    "slowms"=> 0,
                     "sampleRate"=> 1,
                     "filter"=> [
                         "op"=> "query",

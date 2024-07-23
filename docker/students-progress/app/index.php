@@ -74,7 +74,6 @@ if (count($queryList) > 0) {
             }
         }
 
-
     } catch (MongoDB\Driver\Exception\Exception $e) {
         var_dump($e->getMessage());
     }

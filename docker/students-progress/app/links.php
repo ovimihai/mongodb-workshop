@@ -26,7 +26,8 @@ foreach ($students as $s) {
     echo "<tr>";
     echo "<td><a href='sip:".htmlspecialchars($s['email'])."'>".htmlspecialchars($s['name'])."</a></td>";
     echo "<td>".htmlspecialchars($s['position'])."</td>";
-    $link = 'mongodb://user'.$s['db'].':pass'.$s['db'].'@'.$conf['student']['hosts'][$s['host']].':'.$conf['student']['port'];
+    $link = 'mongodb://user'.$s['db'].':pass'.$s['db'].'@'.$conf['student']['hosts'][$s['host']].':'.$conf['student']['port'].'/?authSource=db' . $s['db'];
+
     echo "<td>".htmlspecialchars($link)."</td>";
     echo "</tr>";
 }
@@ -34,6 +35,12 @@ echo "</table>";
 
 
 ?>
+<script type="text/javascript">
+    setTimeout(function () { location.reload(1); }, 5000);
+
+</script>
+
+
 <style>
     table, th, td {
         border: 1px solid black;
