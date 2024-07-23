@@ -1,0 +1,17 @@
+{
+  "timezone": "Europe/Bucharest",
+  "student": {
+    "hosts": {
+      "1": "host1",
+      "2": "host2"
+    },
+    "port": 27100,
+    "adminLogin": "adminUser:adminPass"
+  },
+  "teacher": {
+    "host": "host3",
+    "port": 27100,
+    "login": "adminUser:adminPass"
+  },
+  "maxDbNo": 15
+}
