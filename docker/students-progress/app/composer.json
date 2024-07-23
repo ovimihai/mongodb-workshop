@@ -1,0 +1,11 @@
+{
+    "name": "ovimihai/mongo-students-progress",
+    "require": {
+        "mongodb/mongodb": "^1.19"
+    },
+    "authors": [
+        {
+            "name": "ovimihai"
+        }
+    ]
+}
