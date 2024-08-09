@@ -15,7 +15,6 @@ if (isset($_GET['interval'])) {
 $msAgo = $interval*60*1000;
 $timeLimit = $crtTimeMs - $msAgo;
 $mongoTimeLimit = new MongoDB\BSON\UTCDateTime( $timeLimit );
-echo "Queries since: " .  $mongoTimeLimit->toDateTime()->setTimezone($tzo)->format('Y-m-d H:i:s');
 
 $query = [
     "op"=> "query",
@@ -25,6 +24,7 @@ $query = [
 ];
 
 $queryList = [];
+$queryCounts = [];
 
 foreach ($mongoHosts as $hostNo =>$host) {
     try{
@@ -38,7 +38,11 @@ foreach ($mongoHosts as $hostNo =>$host) {
         $profile = $client->selectCollection($dbName, 'system.profile');
         $userQueries = $profile->find($query);
         foreach ($userQueries as $q) {
+            $id = intval(str_pad($hostNo, 2, '0', STR_PAD_LEFT)
+                . str_pad($i, 2, '0', STR_PAD_LEFT));
+
             $queryList[] = [
+                "id" => $id,
                 "host" => $hostNo,
                 "db" => $i,
                 "collection" => $q->command->find,
@@ -51,10 +55,34 @@ foreach ($mongoHosts as $hostNo =>$host) {
                 "user" => $q->user,
                 "ts" => $q->ts->toDateTime()->setTimezone($tzo)->format('H:i:s')
             ];
+
+            $minute = round($q->ts->toDateTime()->setTimezone($tzo)->format('His') / 60);
+            $queryCounts[$id][$minute] += 1;
         }
     }
 }
+
+$qcPlot = [];
+foreach ($queryCounts as $key => $value) {
+    $qcPlot[] = [
+            'x' =>  array_keys($value),
+            'y' => array_values($value),
+            'type' => 'scatter',
+            'name' => $key
+        ];
+}
+?><!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://cdn.plot.ly/plotly-2.34.0.min.js" charset="utf-8"></script>
+</head>
+<body>
+<?php
+echo "Queries since: " .  $mongoTimeLimit->toDateTime()->setTimezone($tzo)->format('Y-m-d H:i:s');
 echo "<br />Queries count: " . count($queryList);
+?>
+<div id="myDiv"></div>
+<?php
 
 if (count($queryList) > 0) {
 
@@ -65,18 +93,38 @@ if (count($queryList) > 0) {
         $students = [];
 
         foreach ($studentsQuery as $student) {
-            $students[$student['host']][$student['db']] = $student;
+            $id = intval(str_pad($student['host'], 2, '0', STR_PAD_LEFT)
+                . str_pad($student['db'], 2, '0', STR_PAD_LEFT));
+            $students[$id] = $student;
         }
         foreach ($queryList as &$q) {
-            if (isset($students[$q['host']][$q['db']])) {
-                $q['student'] = $students[$q['host']][$q['db']]['name'];
-                $q['position'] = $students[$q['host']][$q['db']]['position'];
+            if (isset($students[$q['id']])) {
+                $q['student'] = $students[$q['id']]['name'];
+                $q['position'] = $students[$q['id']]['position'];
             }
         }
-
+        foreach ($qcPlot as &$qc) {
+            if (isset($students[$qc['name']])) {
+                $qc['name'] = $students[$qc['name']]['name'];
+            }
+        }
     } catch (MongoDB\Driver\Exception\Exception $e) {
         var_dump($e->getMessage());
     }
+
+    ?>
+    <script type="text/javascript">
+        var layout = {
+            autosize: false,
+            width: 1000,
+            height: 300,
+            margin: { l: 20 , r: 5, b: 5, t: 20, pad: 2
+            },
+        };
+        var data = <?php echo json_encode($qcPlot); ?>;
+        Plotly.newPlot('myDiv', data, layout);
+    </script>
+    <?php
 
     echo "<table>";
     echo "<tr>";
@@ -113,3 +161,4 @@ if (count($queryList) > 0) {
         padding: 3px;
     }
 </style>
+</body>
