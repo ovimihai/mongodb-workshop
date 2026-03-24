@@ -30,7 +30,7 @@ We will talk about MongoDB schema design and what are the classic data modeling 
 We will build some simple aggregation pipelines having in mind you might come from a SQL mindset
 
 ### Indexes
-We will try few indexes types, explore some popular data models and investigate how queryies actually work 
+We will try few indexes types, explore some popular data models and investigate how queries actually work 
 
 ### Replication
 During this chapter you will understand how MongoDB Replication works, what you should have in mind when configure it. 

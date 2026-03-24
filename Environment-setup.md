@@ -5,7 +5,7 @@
 For the workshop exercises you need a MongoDB **client** and a MongoDB **server instance**.
 
 ### MongoDB client
-1. [Studio 3T free](https://studio3t.com/free/)
+1. [Mongo Compass](https://www.mongodb.com/try/download/compass) - MongoDB's official GUI client
 
 ### MongoDB instance - choose one
 1. Provided by the teacher during the workshop

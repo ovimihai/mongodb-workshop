@@ -1,4 +1,4 @@
-FROM mongo:6.0.8
+FROM mongo:8.0.20
 
 
 RUN apt-get update &&\

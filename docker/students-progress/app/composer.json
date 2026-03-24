@@ -1,7 +1,7 @@
 {
     "name": "ovimihai/mongo-students-progress",
     "require": {
-        "mongodb/mongodb": "^1.19"
+        "mongodb/mongodb": "^2.2"
     },
     "authors": [
         {
